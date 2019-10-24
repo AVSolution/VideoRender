@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{38ba4ac1-e38b-442f-a14a-6b3c28c6249e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="opencv">
+      <UniqueIdentifier>{5537c03b-20ca-40d0-9489-1e5be9d2f424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libyuv">
+      <UniqueIdentifier>{0016eb2b-9c4b-496e-8047-77317c764bdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="videocapture">
+      <UniqueIdentifier>{c19ade8c-91a5-4a47-8273-43449356762f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audiocapture">
+      <UniqueIdentifier>{27a4e0e0-f598-4f09-8d74-36a098064f0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="videorender">
+      <UniqueIdentifier>{4eb6c6b0-738e-484a-be7d-a69f3a05a8e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="videoroute">
+      <UniqueIdentifier>{81b96e1a-bca0-4c44-b280-0da93fbe54d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="filesource">
+      <UniqueIdentifier>{afa06a65-f2d2-4335-b2f8-5ac3c164157d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="buffer">
+      <UniqueIdentifier>{67f07491-10a3-43c4-a507-da2385ce301d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="VideoRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VideoRenderDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonTem.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="Lock.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGDI.h">
+      <Filter>videorender</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderD2d.h">
+      <Filter>videorender</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderD3d.h">
+      <Filter>videorender</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSDL.h">
+      <Filter>videorender</Filter>
+    </ClInclude>
+    <ClInclude Include="videoFile.h">
+      <Filter>filesource</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="VideoRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoRenderDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Lock.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGDI.cpp">
+      <Filter>videorender</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderD2d.cpp">
+      <Filter>videorender</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderD3d.cpp">
+      <Filter>videorender</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSDL.cpp">
+      <Filter>videorender</Filter>
+    </ClCompile>
+    <ClCompile Include="videofile.cpp">
+      <Filter>filesource</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="VideoRender.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\VideoRender.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\VideoRender.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
