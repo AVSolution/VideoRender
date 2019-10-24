@@ -78,6 +78,15 @@
     <ClInclude Include="videoFile.h">
       <Filter>filesource</Filter>
     </ClInclude>
+    <ClInclude Include="videopublish.h">
+      <Filter>videoroute</Filter>
+    </ClInclude>
+    <ClInclude Include="videosubscribe.h">
+      <Filter>videoroute</Filter>
+    </ClInclude>
+    <ClInclude Include="videoroute.h">
+      <Filter>videoroute</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VideoRender.cpp">
@@ -106,6 +115,15 @@
     </ClCompile>
     <ClCompile Include="videofile.cpp">
       <Filter>filesource</Filter>
+    </ClCompile>
+    <ClCompile Include="videopublish.cpp">
+      <Filter>videoroute</Filter>
+    </ClCompile>
+    <ClCompile Include="videosubscribe.cpp">
+      <Filter>videoroute</Filter>
+    </ClCompile>
+    <ClCompile Include="videoroute.cpp">
+      <Filter>videoroute</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

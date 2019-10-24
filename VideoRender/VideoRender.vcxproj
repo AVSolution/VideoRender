@@ -189,8 +189,11 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="videoFile.h" />
+    <ClInclude Include="videopublish.h" />
     <ClInclude Include="VideoRender.h" />
     <ClInclude Include="VideoRenderDlg.h" />
+    <ClInclude Include="videoroute.h" />
+    <ClInclude Include="videosubscribe.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lock.cpp">
@@ -214,8 +217,11 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="videopublish.cpp" />
     <ClCompile Include="VideoRender.cpp" />
     <ClCompile Include="VideoRenderDlg.cpp" />
+    <ClCompile Include="videoroute.cpp" />
+    <ClCompile Include="videosubscribe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VideoRender.rc" />

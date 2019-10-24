@@ -50,6 +50,7 @@ namespace util {
 		static std::unique_ptr<CGraba> pGraba_;
 	};
 
+
 	template<typename T>
 	T* CSingleTon<T>::pInstance_ = nullptr;
 	template<typename T>
@@ -60,6 +61,7 @@ namespace util {
 #else
 	std::mutex CSingleTon<T>::mutex_;
 #endif
+
 
 	template<typename T>
 	CSingleTon<T>::CSingleTon() {
@@ -88,11 +90,13 @@ namespace util {
 
 #ifdef WIN32
 #define IMPLEMENT_SINGLETON(classname)\
-	classname* CSingleTon<classname>::pInstance_ = nullptr;\
-	std::unique_ptr<CSingleTon<classname>::CGraba> CSingleTon<classname>::pGraba_ = std::unique_ptr<CSingleTon<classname>::CGraba>(new CSingleTon<classname>::CGraba);\
-	CCriticalSection CSingleTon<classname>::cs_;
+	using namespace util;\
+	classname* CSingleTon<classname>::pInstance_ = nullptr; \
+		std::unique_ptr<CSingleTon<classname>::CGraba> CSingleTon<classname>::pGraba_ = std::unique_ptr<CSingleTon<classname>::CGraba>(new CSingleTon<classname>::CGraba); \
+		CCriticalSection CSingleTon<classname>::cs_;
 #else 
 #define IMPLEMENT_SINGLETON(classname)\
+	using namespace util;\
 	classname* CSingleTon<classname>::pInstance_ = nullptr; \
 	std::unique_ptr<CSingleTon<classname>::CGraba> CSingleTon<classname>::pGraba_ = std::unique_ptr<CSingleTon<classname>::CGraba>(new CSingleTon<classname>::CGraba); \
 	std::mutex CSingleTon<classname>::mutex_;
