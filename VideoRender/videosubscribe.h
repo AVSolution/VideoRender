@@ -3,6 +3,9 @@
 
 #include "SingletonTem.h"
 #include "videoroute.h"
+#include "videopublish.h"
+#include <map>
+#include <mutex>
 
 namespace videoroute {
 
@@ -11,8 +14,12 @@ namespace videoroute {
 		CVideoSubscribe();
 		~CVideoSubscribe();
 
-		bool add_stream(const char* pStreamId, IVideoSubscribeObserver* pObserver);
-		bool remote_stream(const char* pStreamId);
+		bool add_subscribe_stream(const char* pPublishStreamId, const char* pSubscribeStreamId,IVideoSubscribeObserver* pObserver);
+		bool remove_subscribe_stream(IVideoSubscribeObserver* pObserver);
+		
+	private:
+		std::mutex	m_mutex;
+		std::map<IVideoSubscribeObserver*, std::shared_ptr<CVideoPublishImpl>> m_mapSubscribe;
 	};
 
 }//namespace videoroute

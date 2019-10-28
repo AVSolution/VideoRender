@@ -13,18 +13,30 @@
 
 
 // CVideoRenderDlg dialog
-
-
-
 CVideoRenderDlg::CVideoRenderDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_VIDEORENDER_DIALOG, pParent)
+	: CDialogEx(IDD_VIDEORENDER_DIALOG, pParent),
+	IVideoSubscribeObserver(nullptr, nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+}
+
+
+CVideoRenderDlg::CVideoRenderDlg(const char* pPublishStreamId /*= nullptr*/,const char* pSubscribeStreamId /*=nullptr*/,CWnd* pParent /*=nullptr*/)
+	: CDialogEx(IDD_VIDEORENDER_DIALOG, pParent),
+	IVideoSubscribeObserver(pPublishStreamId,pSubscribeStreamId)
+{
+	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+	
 }
 
 void CVideoRenderDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_STATIC_1_1, m_st_1_1);
+}
+
+void CVideoRenderDlg::onSubscribeData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) {
+	m_rendergdi.showvideo(m_st_1_1, buffer, nBufferLen, nWidth, nHeight);
 }
 
 BEGIN_MESSAGE_MAP(CVideoRenderDlg, CDialogEx)
@@ -45,7 +57,7 @@ BOOL CVideoRenderDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
+	m_upVideoFile = std::make_unique<CVideoFile>("path/yuv/capture","..\\Debug\\capture.yuv",evType_I420);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 

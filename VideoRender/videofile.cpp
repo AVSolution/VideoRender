@@ -1,13 +1,16 @@
 #include "videoFile.h"
+#include <Windows.h>
 
 namespace videofile {
 
 	CVideoFile::CVideoFile():pfile_(nullptr),
 	evType_(evType_NULL),
-	bRunning_(false) {
+	bRunning_(false) ,
+	IVideoPublishObserver(nullptr){
 	}
 
-	CVideoFile::CVideoFile(const char* pStrFilePath, eVideoFileType evType):
+	CVideoFile::CVideoFile(const char* pStrPublish,const char* pStrFilePath, eVideoFileType evType):
+	IVideoPublishObserver(pStrPublish),
 	evType_(evType),
 	pfile_(nullptr),
 	bRunning_(false) {
@@ -42,6 +45,8 @@ namespace videofile {
 		}
 
 		if (nFrameLen_ && bRunning_) {
+			nFrameWidth_ = nWidth;
+			nFrameHeight_ = nHeight;
 			videobuffer_ = std::shared_ptr<uint8_t>(new uint8_t[nFrameLen_]);
 		}
 	}
@@ -58,7 +63,10 @@ namespace videofile {
 				if (nRes <= 0)
 					fseek(pfile_, 0, SEEK_SET);
 
-				//to do.
+				//to do
+				DWORD dwtps = timeGetTime();
+				if (m_pVideoPublishData)
+					m_pVideoPublishData->onPublishData(dwtps, videobuffer_, nFrameLen_, nFrameWidth_, nFrameHeight_);
 			}
 		}
 	}

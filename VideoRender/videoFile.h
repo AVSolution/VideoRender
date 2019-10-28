@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <thread>
 #include <memory>
+#include "videoroute.h"
+using namespace videoroute;
 
 namespace videofile {
 
@@ -17,10 +19,10 @@ namespace videofile {
 		evType_UNKNOWN = 0xff,
 	};
 
-	class CVideoFile {
+	class CVideoFile : public IVideoPublishObserver {
 	public:
 		explicit CVideoFile();
-		explicit CVideoFile(const char* pStrFilePath,eVideoFileType evType);
+		explicit CVideoFile(const char* pStrPublish,const char* pStrFilePath,eVideoFileType evType);
 		~CVideoFile();
 
 		void startRead(int nWidth,int nHeight);
@@ -37,6 +39,8 @@ namespace videofile {
 		std::thread threadReadFile_;
 		std::shared_ptr<uint8_t> videobuffer_;
 		int	nFrameLen_;
+		int nFrameWidth_;
+		int nFrameHeight_;
 	};
 	
 }//namespace videofile
