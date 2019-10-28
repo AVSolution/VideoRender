@@ -34,7 +34,7 @@ namespace videoroute {
 		m_evrSubscribeType = evrType;
 	}
 
-	bool add_publish(const char* pStreamId, IVideoPublishObserver* const pObserver) {
+	bool add_publish(IVideoPublishObserver* const pObserver) {
 		if (pObserver) {
 			std::string pStreamId;
 			pObserver->onPublishPath(pStreamId);

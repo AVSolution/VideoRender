@@ -1,7 +1,7 @@
 #ifndef __VIDEOSUBSCRIBE_H__
 #define __VIDEOSUBSCRIBE_H__
 
-#include "SingletonTem.h"
+#include "SingletonImpl.h"
 #include "videoroute.h"
 #include "videopublish.h"
 #include <map>

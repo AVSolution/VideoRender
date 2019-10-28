@@ -13,7 +13,10 @@ namespace videofile {
 	IVideoPublishObserver(pStrPublish),
 	evType_(evType),
 	pfile_(nullptr),
-	bRunning_(false) {
+	bRunning_(false),
+	nFrameLen_(0),
+	nFrameWidth_(0),
+	nFrameHeight_(0) {
 		pfile_ = fopen(pStrFilePath, "rb");
 	}
 
@@ -25,10 +28,6 @@ namespace videofile {
 	}
 
 	void CVideoFile::startRead(int nWidth, int nHeight) {
-		if (pfile_) {
-			bRunning_ = true;
-			threadReadFile_ = std::thread(&CVideoFile::ThreadRead, this);
-		}
 		
 		int nFrameLen = 0;
 		switch (evType_) {
@@ -44,10 +43,16 @@ namespace videofile {
 		default:break;
 		}
 
-		if (nFrameLen_ && bRunning_) {
+
+		if (nFrameLen_ && pfile_) {
 			nFrameWidth_ = nWidth;
 			nFrameHeight_ = nHeight;
 			videobuffer_ = std::shared_ptr<uint8_t>(new uint8_t[nFrameLen_]);
+		}
+
+		if (pfile_) {
+			bRunning_ = true;
+			threadReadFile_ = std::thread(&CVideoFile::ThreadRead, this);
 		}
 	}
 
@@ -57,8 +62,9 @@ namespace videofile {
 
 	void CVideoFile::ThreadRead() {
 		
+		std::shared_ptr<uint8_t> bufferTemp;
 		while (bRunning_) {
-			if (pfile_) {
+			if (pfile_ &&  (evrType_Publish_Start == m_evrPublishType) && nFrameLen_ ) {
 				int nRes = fread(videobuffer_.get(),1,nFrameLen_,pfile_);
 				if (nRes <= 0)
 					fseek(pfile_, 0, SEEK_SET);

@@ -57,9 +57,6 @@
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SingletonTem.h">
-      <Filter>util</Filter>
-    </ClInclude>
     <ClInclude Include="Lock.h">
       <Filter>util</Filter>
     </ClInclude>
@@ -86,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="videoroute.h">
       <Filter>videoroute</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonImpl.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -58,6 +58,9 @@ BOOL CVideoRenderDlg::OnInitDialog()
 
 	// TODO: Add extra initialization here
 	m_upVideoFile = std::make_unique<CVideoFile>("path/yuv/capture","..\\Debug\\capture.yuv",evType_I420);
+	add_publish(m_upVideoFile.get());
+	add_subscribe(this);
+	m_upVideoFile->startRead(1920,1080);
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 

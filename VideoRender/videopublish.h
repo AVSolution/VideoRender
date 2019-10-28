@@ -1,7 +1,7 @@
 #ifndef __VIDEOPUBLISH_H__
 #define __VIDEOPUBLISH_H__
 
-#include "SingletonTem.h"
+#include "SingletonImpl.h"
 #include "videoroute.h"
 #include <string>
 #include <list>

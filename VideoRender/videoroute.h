@@ -34,10 +34,10 @@ namespace videoroute {
 
 	protected:
 		IVdieoPublishData*	m_pVideoPublishData;
+		eVideoRouteType		m_evrPublishType;
 
 	private:
 		std::string	m_strPublishStreamId;
-		eVideoRouteType		m_evrPublishType;
 	};
 	
 	class IVideoSubscribeObserver {
