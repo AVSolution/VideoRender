@@ -15,11 +15,7 @@ namespace videoroute {
 		if (pObserver) {
 			std::lock_guard<std::mutex> autoLock(m_mutex);
 			std::shared_ptr<CVideoPublishImpl> videopublishImpl = CVideoPublish::getInstance()->getVideoPublishImpl(pPublishStreamId);
-			if (nullptr == videopublishImpl) {
-				CVideoPublish::getInstance()->add_publish_stream(pPublishStreamId, nullptr);
-				videopublishImpl = CVideoPublish::getInstance()->getVideoPublishImpl(pPublishStreamId);
-			}
-
+			
 			videopublishImpl->add_subscribe(pObserver);
 			m_mapSubscribe.insert(make_pair(pObserver, videopublishImpl));
 		}

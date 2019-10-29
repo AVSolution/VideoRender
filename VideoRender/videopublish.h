@@ -34,6 +34,7 @@ namespace videoroute {
 		CVideoPublishImpl(const std::string& streamId, IVideoPublishObserver* pObserver);
 		~CVideoPublishImpl();
 
+		bool remove_publish();
 		bool add_subscribe(IVideoSubscribeObserver* pObserver);
 		bool reset_publish_observer(IVideoPublishObserver* pObserver);
 

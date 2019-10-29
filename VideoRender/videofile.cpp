@@ -1,5 +1,6 @@
 #include "videoFile.h"
 #include <Windows.h>
+#include "VideoConv.h"
 
 namespace videofile {
 
@@ -43,7 +44,6 @@ namespace videofile {
 		default:break;
 		}
 
-
 		if (nFrameLen_ && pfile_) {
 			nFrameWidth_ = nWidth;
 			nFrameHeight_ = nHeight;
@@ -60,10 +60,24 @@ namespace videofile {
 		bRunning_ = false;
 	}
 
+	void CVideoFile::onNotifyPublish() {
+		if (m_evrPublishType == evrType_Publish_Start)
+			startRead(640, 480);
+		else if (m_evrPublishType == evrType_Publish_Stop || evrType_Publish_unInit == m_evrPublishType)
+			stopRead();
+	}
+
 	void CVideoFile::ThreadRead() {
 		
 		std::shared_ptr<uint8_t> bufferTemp;
+		std::shared_ptr<uint8_t> bufferTemp1;
+		if (evType_I420 == evType_) {
+			bufferTemp.reset(new uint8_t[nFrameLen_ * 2]);
+			bufferTemp1.reset(new uint8_t[nFrameLen_ * 2]);
+		}
+		
 		while (bRunning_) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(30));
 			if (pfile_ &&  (evrType_Publish_Start == m_evrPublishType) && nFrameLen_ ) {
 				int nRes = fread(videobuffer_.get(),1,nFrameLen_,pfile_);
 				if (nRes <= 0)
@@ -71,8 +85,17 @@ namespace videofile {
 
 				//to do
 				DWORD dwtps = timeGetTime();
-				if (m_pVideoPublishData)
-					m_pVideoPublishData->onPublishData(dwtps, videobuffer_, nFrameLen_, nFrameWidth_, nFrameHeight_);
+				if (m_pVideoPublishData) {
+					if (evType_I420 == evType_) {
+						util::CVideoConv::I420ToRGB24(videobuffer_.get(), bufferTemp.get(),nFrameLen_ * 2,nFrameWidth_,nFrameHeight_);
+						util::CVideoConv::VerMirror_RGB24(bufferTemp.get(), bufferTemp1.get(), nFrameWidth_, nFrameHeight_);
+						if(m_pVideoPublishData)
+							m_pVideoPublishData->onPublishData(dwtps, bufferTemp1, nFrameLen_ * 2, nFrameWidth_, nFrameHeight_);
+					}
+					else if (evType_RGB24 == evType_) {
+						m_pVideoPublishData->onPublishData(dwtps, videobuffer_, nFrameLen_, nFrameWidth_, nFrameHeight_);
+					}
+				}
 			}
 		}
 	}

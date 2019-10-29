@@ -35,7 +35,6 @@ namespace videorender {
 			if (m_nWidth != nWidth || m_nHeight != nHeight) {
 				m_nWidth = nWidth;
 				m_nHeight = nHeight;
-				//m_videoBuffer.reset(new unsigned char[m_nWidth * m_nHeight * 3]);
 				m_videoBuffer = buffer;
 				if (!m_bThreadRuning) {
 					m_bThreadRuning = true;
@@ -56,6 +55,9 @@ namespace videorender {
 				m_dLasttps = ddNow;
 				m_nFrameCount = 0;
 			}
+
+			if(m_nFps)
+				
 
 			return true;
 		}

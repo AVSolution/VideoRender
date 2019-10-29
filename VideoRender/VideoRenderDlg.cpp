@@ -11,7 +11,6 @@
 #define new DEBUG_NEW
 #endif
 
-
 // CVideoRenderDlg dialog
 CVideoRenderDlg::CVideoRenderDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_VIDEORENDER_DIALOG, pParent),
@@ -20,13 +19,11 @@ CVideoRenderDlg::CVideoRenderDlg(CWnd* pParent /*=nullptr*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-
 CVideoRenderDlg::CVideoRenderDlg(const char* pPublishStreamId /*= nullptr*/,const char* pSubscribeStreamId /*=nullptr*/,CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_VIDEORENDER_DIALOG, pParent),
 	IVideoSubscribeObserver(pPublishStreamId,pSubscribeStreamId)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	
 }
 
 void CVideoRenderDlg::DoDataExchange(CDataExchange* pDX)
@@ -35,12 +32,17 @@ void CVideoRenderDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_STATIC_1_1, m_st_1_1);
 }
 
-void CVideoRenderDlg::onSubscribeData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) {
-	m_rendergdi.showvideo(m_st_1_1, buffer, nBufferLen, nWidth, nHeight);
+void CVideoRenderDlg::onNotifySubscribe() {
+	
+}
+
+void CVideoRenderDlg::onSubscribeData(unsigned long ulTps, const char* publishStreamId, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) {
+	//m_mapVideoFile[publishStreamId].rendergdi.showvideo(m_st_1_1, buffer, nBufferLen, nWidth, nHeight);
 }
 
 BEGIN_MESSAGE_MAP(CVideoRenderDlg, CDialogEx)
 	ON_WM_PAINT()
+	ON_WM_CLOSE()
 	ON_WM_QUERYDRAGICON()
 END_MESSAGE_MAP()
 
@@ -52,15 +54,20 @@ BOOL CVideoRenderDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
+	// when the application's main window is not a dialog
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-	m_upVideoFile = std::make_unique<CVideoFile>("path/yuv/capture","..\\Debug\\capture.yuv",evType_I420);
-	add_publish(m_upVideoFile.get());
+	videofileItem vfi;
+	std::string publishstreamId = "path/yuv/capture";
+	vfi.videofile = std::make_unique<CVideoFile>(publishstreamId.c_str(), "..\\Debug\\capture.yuv", evType_I420);
+	//vfi.rendergdi.enableTipInfo(true);
+	//vfi.rendergdi.addtext(CString(publishstreamId.c_str()), 0, 0, 200, 30);
+	m_mapVideoFile.insert(make_pair(publishstreamId,vfi));
 	add_subscribe(this);
-	m_upVideoFile->startRead(1920,1080);
+	add_publish(vfi.videofile.get());
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -93,6 +100,13 @@ void CVideoRenderDlg::OnPaint()
 	}
 }
 
+void CVideoRenderDlg::OnClose() {
+	remove_subscribe(this);
+	for(auto &it : m_mapVideoFile)
+		remove_publish(it.second.videofile.get());
+
+	CDialogEx::OnClose();
+}
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
 HCURSOR CVideoRenderDlg::OnQueryDragIcon()

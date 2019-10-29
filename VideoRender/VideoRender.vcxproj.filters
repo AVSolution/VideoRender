@@ -87,6 +87,9 @@
     <ClInclude Include="SingletonImpl.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="VideoConv.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VideoRender.cpp">
@@ -124,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="videoroute.cpp">
       <Filter>videoroute</Filter>
+    </ClCompile>
+    <ClCompile Include="VideoConv.cpp">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

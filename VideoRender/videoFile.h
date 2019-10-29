@@ -29,6 +29,7 @@ namespace videofile {
 		void stopRead();
 
 	protected:
+		virtual void onNotifyPublish() override;
 		void ThreadRead();
 
 	private:

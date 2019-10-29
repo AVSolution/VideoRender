@@ -28,7 +28,7 @@ namespace videoroute {
 		std::lock_guard<std::mutex> autoLock(m_mutex);
 		auto it = m_mapPublish.find(pStreamId);
 		if (m_mapPublish.end() != it) {
-			it->second.reset();
+			it->second->remove_publish();
 			m_mapPublish.erase(it);
 		}
 
@@ -41,8 +41,12 @@ namespace videoroute {
 		if (m_mapPublish.end() != it) {
 			return it->second;
 		}
+		else {
+			std::shared_ptr<CVideoPublishImpl> publishImp = std::make_shared<CVideoPublishImpl>(publishStream, nullptr);
+			m_mapPublish.insert(make_pair(publishStream, publishImp));
+		}
 
-		return std::shared_ptr<CVideoPublishImpl>(nullptr);
+		return m_mapPublish[publishStream];
 	}
 
 	CVideoPublishImpl::CVideoPublishImpl() {
@@ -60,8 +64,12 @@ namespace videoroute {
 	}
 
 	CVideoPublishImpl::~CVideoPublishImpl() {
+		remove_publish();
+	}
 
-		for (auto &it: m_listSubObserver) {
+	bool CVideoPublishImpl::remove_publish() {
+		std::lock_guard<std::mutex> autoLock(m_mutex);
+		for (auto &it : m_listSubObserver) {
 			CVideoSubscribe::getInstance()->remove_subscribe_stream(it);
 		}
 		if (m_pObserver) {
@@ -71,6 +79,8 @@ namespace videoroute {
 
 		m_pObserver = nullptr;
 		m_strStreamId.clear();
+
+		return true;
 	}
 
 	bool CVideoPublishImpl::add_subscribe(IVideoSubscribeObserver* pObserver) {
@@ -117,8 +127,12 @@ namespace videoroute {
 
 	void CVideoPublishImpl::onPublishData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) {
 		std::lock_guard<std::mutex> autoLock(m_mutex);
- 		for (auto &it : m_listSubObserver)
-			it->onSubscribeData(ulTps, buffer, nBufferLen, nWidth, nHeight);
+		for (auto &it : m_listSubObserver) {
+			std::string strpublish;
+			if (m_pObserver)
+				m_pObserver->onPublishPath(strpublish);
+			it->onSubscribeData(ulTps, strpublish.c_str(),buffer, nBufferLen, nWidth, nHeight);
+		}
 	}
 
 }//namespace videoroute

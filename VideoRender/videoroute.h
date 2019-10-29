@@ -19,7 +19,7 @@ namespace videoroute {
 	class IVdieoPublishData {
 	public:
 		virtual ~IVdieoPublishData() { ; }
-		virtual void onPublishData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) = 0;
+		virtual void onPublishData(unsigned long ulTps,std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) = 0;
 	};
 
 	class IVideoPublishObserver {
@@ -31,6 +31,8 @@ namespace videoroute {
 
 		void onPublishData(IVdieoPublishData* const pObserver);
 		void onPublishStatus(eVideoRouteType evrType);
+
+		virtual void onNotifyPublish() = 0;
 
 	protected:
 		IVdieoPublishData*	m_pVideoPublishData;
@@ -49,7 +51,9 @@ namespace videoroute {
 
 		void onSubscribeStatus(eVideoRouteType evrType);
 
-		virtual void onSubscribeData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) = 0;
+		virtual void onNotifySubscribe() = 0;
+
+		virtual void onSubscribeData(unsigned long ulTps, const char* publishStreamId, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) = 0;
 
 	private:
 		std::string	m_strPublishStreamId;

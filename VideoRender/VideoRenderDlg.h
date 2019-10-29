@@ -11,6 +11,9 @@ using namespace videorender;
 #include "videoFile.h"
 using namespace  videofile;
 
+#include <map>
+#include <mutex>
+
 // CVideoRenderDlg dialog
 class CVideoRenderDlg : public CDialogEx, public IVideoSubscribeObserver
 {
@@ -26,7 +29,9 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	virtual void onSubscribeData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) override;
+
+	virtual void onNotifySubscribe() override;
+	virtual void onSubscribeData(unsigned long ulTps, const char* publishStreamId, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) override;
 
 // Implementation
 protected:
@@ -35,11 +40,25 @@ protected:
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
+	afx_msg void OnClose();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
-	CRenderGDI m_rendergdi;
-	std::unique_ptr<CVideoFile> m_upVideoFile;
+// 	CRenderGDI m_rendergdi;
+// 	std::string m_strPublish;
+// 	std::string m_strPublish1;
+// 	std::unique_ptr<CVideoFile> m_upVideoFile;
+// 	std::unique_ptr<CVideoFile> m_upVideoFile1;
+
+	struct videofileItem {
+		std::unique_ptr<CVideoFile> videofile;
+		CRenderGDI	rendergdi;
+		videofileItem(std::unique_ptr<CVideoFile> videofile_, CRenderGDI rendergdi_) {
+		}
+	};
+
+	std::mutex	m_mutex;
+	std::map<std::string, videofileItem> m_mapVideoFile;
 	
 public:
 	CStatic m_st_1_1;

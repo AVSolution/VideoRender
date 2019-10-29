@@ -19,6 +19,7 @@ namespace videoroute {
 
 	void IVideoPublishObserver::onPublishStatus(eVideoRouteType evrType) {
 		m_evrPublishType = evrType;
+		onNotifyPublish();
 	}
 
 	IVideoSubscribeObserver::IVideoSubscribeObserver(const std::string &publishStreamId, const std::string &subscribeStreamId):
@@ -32,6 +33,7 @@ namespace videoroute {
 
 	void IVideoSubscribeObserver::onSubscribeStatus(eVideoRouteType evrType) {
 		m_evrSubscribeType = evrType;
+		onNotifySubscribe();
 	}
 
 	bool add_publish(IVideoPublishObserver* const pObserver) {
