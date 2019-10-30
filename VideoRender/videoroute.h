@@ -14,6 +14,8 @@ namespace videoroute {
 		evrType_Publish_unInit,
 		evrType_Subscribe_Start,
 		evrType_Subscribe_Stop,
+
+		evrType_UNKNOWN = 0xff,
 	};
 
 	class IVdieoPublishData {
@@ -44,27 +46,17 @@ namespace videoroute {
 	
 	class IVideoSubscribeObserver {
 	public:
-		IVideoSubscribeObserver(const std::string &publishStreamId, const std::string &subscribeStreamId);
+		IVideoSubscribeObserver();
 		virtual ~IVideoSubscribeObserver() { ; }
 
-		void onSubscribePath(std::string &publishStreamId, std::string &subscribeStreamId);
-
-		void onSubscribeStatus(eVideoRouteType evrType);
-
-		virtual void onNotifySubscribe() = 0;
-
+		virtual void onSubscribeStatus(const char* publishSteamID, eVideoRouteType evrType) = 0;
 		virtual void onSubscribeData(unsigned long ulTps, const char* publishStreamId, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) = 0;
-
-	private:
-		std::string	m_strPublishStreamId;
-		std::string m_strSubscribeStreamId;
-		eVideoRouteType	m_evrSubscribeType;
 	};
 
 	bool add_publish(IVideoPublishObserver* const pObserver);
 	bool remove_publish(IVideoPublishObserver* const pObserver);
-	bool add_subscribe(IVideoSubscribeObserver* const pObserver);
-	bool remove_subscribe(IVideoSubscribeObserver* const pObserver);
+	bool add_subscribe(const char* publishStreamID,IVideoSubscribeObserver* const pObserver);
+	bool remove_subscribe(const char* publishStreamID,IVideoSubscribeObserver* const pObserver);
 
 }//namespace videoroute
 

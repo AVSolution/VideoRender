@@ -28,6 +28,12 @@ namespace videorender {
 	{
 	}
 
+	CRenderGDI::CRenderGDI(const CRenderGDI& rendergdi) {
+		m_nWidth = rendergdi.m_nWidth;
+		m_nHeight = rendergdi.m_nHeight;
+		m_wnd = rendergdi.m_wnd;
+	}
+
 	bool CRenderGDI::showvideo(void* pHandle, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight)
 	{
 		if (pHandle && nBufferLen == nWidth * nHeight * 3) {

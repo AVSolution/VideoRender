@@ -28,7 +28,7 @@ namespace videoroute {
 			std::lock_guard<std::mutex> autoLock(m_mutex);
 			auto it = m_mapSubscribe.find(pObserver);
 			if (m_mapSubscribe.end() != it) {
-				it->first->onSubscribeStatus(evrType_Subscribe_Stop);
+				it->first->onSubscribeStatus(nullptr,evrType_Subscribe_Stop);
 				m_mapSubscribe.erase(it);
 			}
 		}

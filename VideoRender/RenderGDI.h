@@ -11,6 +11,7 @@ namespace videorender {
 	public:
 		CRenderGDI();
 		CRenderGDI(void* pHandle, int nWidth, int nHeight);
+		CRenderGDI(const CRenderGDI& rendergdi);
 		~CRenderGDI();
 
 		void enableTipInfo(bool bEnable) { m_bEnableTipInfo = bEnable; }

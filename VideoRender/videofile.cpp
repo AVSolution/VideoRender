@@ -77,7 +77,7 @@ namespace videofile {
 		}
 		
 		while (bRunning_) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(30));
+			std::this_thread::sleep_for(std::chrono::milliseconds(evType_I420 == evType_ ? 30:40));
 			if (pfile_ &&  (evrType_Publish_Start == m_evrPublishType) && nFrameLen_ ) {
 				int nRes = fread(videobuffer_.get(),1,nFrameLen_,pfile_);
 				if (nRes <= 0)

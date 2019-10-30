@@ -22,18 +22,7 @@ namespace videoroute {
 		onNotifyPublish();
 	}
 
-	IVideoSubscribeObserver::IVideoSubscribeObserver(const std::string &publishStreamId, const std::string &subscribeStreamId):
-	m_strPublishStreamId(publishStreamId), m_strSubscribeStreamId(subscribeStreamId) {
-	}
-
-	void IVideoSubscribeObserver::onSubscribePath(std::string &publishStreamId, std::string &subscribeStreamId) {
-		publishStreamId = m_strPublishStreamId;
-		subscribeStreamId = m_strSubscribeStreamId;
-	}
-
-	void IVideoSubscribeObserver::onSubscribeStatus(eVideoRouteType evrType) {
-		m_evrSubscribeType = evrType;
-		onNotifySubscribe();
+	IVideoSubscribeObserver::IVideoSubscribeObserver(){
 	}
 
 	bool add_publish(IVideoPublishObserver* const pObserver) {
@@ -54,22 +43,14 @@ namespace videoroute {
 		}
 	}
 
-	bool add_subscribe(IVideoSubscribeObserver* const pObserver) {
-		if (pObserver) {
-			std::string publishStreamId, subscribeStreamId;
-			pObserver->onSubscribePath(publishStreamId, subscribeStreamId);
-			if(publishStreamId.length() && subscribeStreamId.length())
-				return CVideoSubscribe::getInstance()->add_subscribe_stream(publishStreamId.c_str(),subscribeStreamId.c_str(),pObserver);
-		}
+	bool add_subscribe(const char* publishStreamID,IVideoSubscribeObserver* const pObserver) {
+		if (pObserver && publishStreamID && strlen(publishStreamID))
+			return CVideoPublish::getInstance()->add_subscribe_stream(publishStreamID, pObserver);
 	}
 
-	bool remove_subscribe(IVideoSubscribeObserver* const pObserver) {
-		if (pObserver) {
-			std::string publishStreamId, subscribeStreamId;
-			pObserver->onSubscribePath(publishStreamId, subscribeStreamId);
-			if (publishStreamId.length() && subscribeStreamId.length())
-				return CVideoSubscribe::getInstance()->remove_subscribe_stream(pObserver);
-		}
+	bool remove_subscribe(const char* publishStreamID, IVideoSubscribeObserver* const pObserver) {
+		if (pObserver && publishStreamID && strlen(publishStreamID))
+			return CVideoPublish::getInstance()->remove_subscribe_stream(publishStreamID, pObserver);
 	}
 
 }//namespace videoroute

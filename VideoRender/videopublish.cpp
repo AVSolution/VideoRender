@@ -1,5 +1,4 @@
 #include "videopublish.h"
-#include "videosubscribe.h"
 
 namespace videoroute {
 
@@ -30,6 +29,31 @@ namespace videoroute {
 		if (m_mapPublish.end() != it) {
 			it->second->remove_publish();
 			m_mapPublish.erase(it);
+		}
+
+		return true;
+	}
+
+	bool CVideoPublish::add_subscribe_stream(const char* publishStreamId, IVideoSubscribeObserver* pObserver) {
+		std::lock_guard<std::mutex> autoLock(m_mutex);
+		auto it = m_mapPublish.find(publishStreamId);
+		if (m_mapPublish.end() == it) {
+			std::shared_ptr<CVideoPublishImpl> publishImp = std::make_shared<CVideoPublishImpl>(publishStreamId, nullptr);
+			m_mapPublish.insert(make_pair(publishStreamId, publishImp));
+		}
+
+		it = m_mapPublish.find(publishStreamId);
+		if (m_mapPublish.end() != it && nullptr != pObserver)
+			it->second->add_subscribe(pObserver);
+
+		return true;
+	}
+
+	bool CVideoPublish::remove_subscribe_stream(const char* publishStreamId, IVideoSubscribeObserver* pObserver) {
+		std::lock_guard<std::mutex> autoLock(m_mutex);
+		auto it = m_mapPublish.find(publishStreamId);
+		if (m_mapPublish.end() != it) {
+			it->second->remove_subscribe(pObserver);
 		}
 
 		return true;
@@ -69,9 +93,9 @@ namespace videoroute {
 
 	bool CVideoPublishImpl::remove_publish() {
 		std::lock_guard<std::mutex> autoLock(m_mutex);
-		for (auto &it : m_listSubObserver) {
-			CVideoSubscribe::getInstance()->remove_subscribe_stream(it);
-		}
+		for (auto &it : m_listSubObserver)
+			it->onSubscribeStatus(m_strStreamId.c_str(),evrType_Subscribe_Stop);
+
 		if (m_pObserver) {
 			m_pObserver->onPublishData(nullptr);
 			m_pObserver->onPublishStatus(evrType_Publish_unInit);
@@ -91,9 +115,20 @@ namespace videoroute {
 				m_listSubObserver.push_back(pObserver);
 				if (m_pObserver) {
 					m_pObserver->onPublishStatus(evrType_Publish_Start);
-					pObserver->onSubscribeStatus(evrType_Subscribe_Start);
+					pObserver->onSubscribeStatus(m_strStreamId.c_str(),evrType_Subscribe_Start);
 				}
 			}
+		}
+
+		return true;
+	}
+
+	bool CVideoPublishImpl::remove_subscribe(IVideoSubscribeObserver* pObserver) {
+		std::lock_guard<std::mutex> autoLock(m_mutex);
+		auto it = find(m_listSubObserver.begin(), m_listSubObserver.end(), pObserver);
+		if (m_listSubObserver.end() != it) {
+			pObserver->onSubscribeStatus(m_strStreamId.c_str(), evrType_Subscribe_Stop);
+			m_listSubObserver.erase(it);
 		}
 
 		return true;
@@ -113,7 +148,7 @@ namespace videoroute {
 			
 			//range for notify subscribe observer.
  			for (auto &it : m_listSubObserver) {
- 				it->onSubscribeStatus(evrType_Subscribe_Start);
+ 				it->onSubscribeStatus(m_strStreamId.c_str(),evrType_Subscribe_Start);
  			}
 			return true;
 		}
@@ -128,10 +163,7 @@ namespace videoroute {
 	void CVideoPublishImpl::onPublishData(unsigned long ulTps, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight) {
 		std::lock_guard<std::mutex> autoLock(m_mutex);
 		for (auto &it : m_listSubObserver) {
-			std::string strpublish;
-			if (m_pObserver)
-				m_pObserver->onPublishPath(strpublish);
-			it->onSubscribeData(ulTps, strpublish.c_str(),buffer, nBufferLen, nWidth, nHeight);
+			it->onSubscribeData(ulTps, m_strStreamId.c_str(),buffer, nBufferLen, nWidth, nHeight);
 		}
 	}
 

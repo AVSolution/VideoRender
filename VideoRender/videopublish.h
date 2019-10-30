@@ -20,6 +20,8 @@ namespace videoroute {
 	public:
 		bool add_publish_stream(const char* pStreamId, IVideoPublishObserver* pObserver);
 		bool remove_publish_stream(const char* pStreamId);
+		bool add_subscribe_stream(const char* publishStreamId,IVideoSubscribeObserver* pObserver);
+		bool remove_subscribe_stream(const char* publishStreamId, IVideoSubscribeObserver* pObserver);
 
 		std::shared_ptr<CVideoPublishImpl>& getVideoPublishImpl(const std::string &publishStream);
 
@@ -36,6 +38,7 @@ namespace videoroute {
 
 		bool remove_publish();
 		bool add_subscribe(IVideoSubscribeObserver* pObserver);
+		bool remove_subscribe(IVideoSubscribeObserver* pObserver);
 		bool reset_publish_observer(IVideoPublishObserver* pObserver);
 
 	protected:
