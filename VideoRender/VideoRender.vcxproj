@@ -179,6 +179,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DShowCapture.h" />
     <ClInclude Include="VideoConv.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="RenderD2d.h" />
@@ -194,9 +195,9 @@
     <ClInclude Include="VideoRender.h" />
     <ClInclude Include="VideoRenderDlg.h" />
     <ClInclude Include="videoroute.h" />
-    <ClInclude Include="videosubscribe.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DShowCapture.cpp" />
     <ClCompile Include="VideoConv.cpp" />
     <ClCompile Include="Lock.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -223,7 +224,6 @@
     <ClCompile Include="VideoRender.cpp" />
     <ClCompile Include="VideoRenderDlg.cpp" />
     <ClCompile Include="videoroute.cpp" />
-    <ClCompile Include="videosubscribe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="VideoRender.rc" />

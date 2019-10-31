@@ -57,6 +57,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnClose();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg void OnBnClickedButtonOk();
 	DECLARE_MESSAGE_MAP()
 
 	struct videofileItem {
@@ -70,6 +71,5 @@ protected:
 	
 public:
 	CStatic m_st_1_1;
-	afx_msg void OnBnClickedButtonOk();
 	CStatic m_s_1_2;
 };

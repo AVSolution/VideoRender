@@ -5,14 +5,15 @@
 
 namespace videorender {
 
-	CRenderGDI::CRenderGDI() :
+	CRenderGDI::CRenderGDI(eRenderType renderType) :
 		m_nWidth(0),
 		m_nHeight(0),
 		m_wnd(nullptr),
 		m_bThreadRuning(false),
 		m_nFrameCount(0),
 		m_bEnableTipInfo(false),
-		m_pImageBk(nullptr)
+		m_pImageBk(nullptr),
+		m_renderType(renderType)
 	{
 	}
 
@@ -36,12 +37,14 @@ namespace videorender {
 
 	bool CRenderGDI::showvideo(void* pHandle, std::shared_ptr<uint8_t> buffer, int nBufferLen, int nWidth, int nHeight)
 	{
-		if (pHandle && nBufferLen == nWidth * nHeight * 3) {
+		if (pHandle && ((nBufferLen == nWidth * nHeight * 3 && eRenderType_RGB24 == m_renderType) ||
+			(nBufferLen == nWidth * nHeight * 4 && eRenderType_BGRA == m_renderType)) ) {
 			m_wnd = pHandle;
 			if (m_nWidth != nWidth || m_nHeight != nHeight) {
 				m_nWidth = nWidth;
 				m_nHeight = nHeight;
-				m_videoBuffer = buffer;
+				//m_videoBuffer = buffer;
+				m_videoBuffer.reset(new uint8_t[nBufferLen]);
 				if (!m_bThreadRuning) {
 					m_bThreadRuning = true;
 					m_threadRender = std::thread(&CRenderGDI::ThreadRender, this);
@@ -49,6 +52,7 @@ namespace videorender {
 				}
 			}
 
+			memcpy(m_videoBuffer.get(), buffer.get(), nBufferLen);
 			if (0 == m_nFrameCount)
 				m_dLasttps = timeGetTime();
 			m_nFrameCount++;
@@ -134,12 +138,12 @@ namespace videorender {
 
 			BITMAPINFO bmpHdr = { 0 };
 			bmpHdr.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-			bmpHdr.bmiHeader.biBitCount = 24;
+			bmpHdr.bmiHeader.biBitCount = (m_renderType == eRenderType_BGRA ? 32 : 24);
 			bmpHdr.bmiHeader.biClrImportant = 0;
 			bmpHdr.bmiHeader.biClrUsed = 0;
 			bmpHdr.bmiHeader.biPlanes = 1;
 			bmpHdr.bmiHeader.biWidth = m_nWidth;
-			bmpHdr.bmiHeader.biHeight = m_nHeight;
+			bmpHdr.bmiHeader.biHeight = -m_nHeight;
 			bmpHdr.bmiHeader.biCompression = BI_RGB;
 			bmpHdr.bmiHeader.biXPelsPerMeter = 0;
 			bmpHdr.bmiHeader.biYPelsPerMeter = 0;

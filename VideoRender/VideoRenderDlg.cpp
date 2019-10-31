@@ -80,8 +80,8 @@ BOOL CVideoRenderDlg::OnInitDialog()
 	//second;
 	videofileItem vfi1;
 	publishstreamId = "path/rgb24/capture";
-	vfi1.videofile = std::make_shared<CVideoFile>(publishstreamId.c_str(), "..\\Debug\\rgb24", evType_RGB24);
-	vfi1.rendergdi = std::make_shared<CRenderGDI>();
+	vfi1.videofile = std::make_shared<CVideoFile>(publishstreamId.c_str(), "..\\Debug\\bgra.rgb", evType_BGRA);
+	vfi1.rendergdi = std::make_shared<CRenderGDI>(eRenderType_BGRA);
 	vfi1.wnd = m_s_1_2.m_hWnd;
 	vfi1.rendergdi->enableTipInfo(true);
 	vfi1.rendergdi->addtext(CString(publishstreamId.c_str()), 0, 0, 200, 30);
@@ -129,6 +129,7 @@ void CVideoRenderDlg::OnClose() {
 
 	CDialogEx::OnClose();
 }
+
 // The system calls this function to obtain the cursor to display while the user drags
 //  the minimized window.
 HCURSOR CVideoRenderDlg::OnQueryDragIcon()

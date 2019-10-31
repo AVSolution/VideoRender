@@ -78,9 +78,6 @@
     <ClInclude Include="videopublish.h">
       <Filter>videoroute</Filter>
     </ClInclude>
-    <ClInclude Include="videosubscribe.h">
-      <Filter>videoroute</Filter>
-    </ClInclude>
     <ClInclude Include="videoroute.h">
       <Filter>videoroute</Filter>
     </ClInclude>
@@ -89,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="VideoConv.h">
       <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="DShowCapture.h">
+      <Filter>videocapture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +122,14 @@
     <ClCompile Include="videopublish.cpp">
       <Filter>videoroute</Filter>
     </ClCompile>
-    <ClCompile Include="videosubscribe.cpp">
-      <Filter>videoroute</Filter>
-    </ClCompile>
     <ClCompile Include="videoroute.cpp">
       <Filter>videoroute</Filter>
     </ClCompile>
     <ClCompile Include="VideoConv.cpp">
       <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="DShowCapture.cpp">
+      <Filter>videocapture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

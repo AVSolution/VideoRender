@@ -41,6 +41,9 @@ namespace videofile {
 		case evType_RGB24: {
 			nFrameLen_ = nWidth * nHeight * 3;
 		} break;
+		case evType_BGRA: {
+			nFrameLen_ = nWidth * nHeight * 4;
+		}
 		default:break;
 		}
 
@@ -70,30 +73,51 @@ namespace videofile {
 	void CVideoFile::ThreadRead() {
 		
 		std::shared_ptr<uint8_t> bufferTemp;
-		std::shared_ptr<uint8_t> bufferTemp1;
-		if (evType_I420 == evType_) {
+		if (evType_I420 == evType_)
 			bufferTemp.reset(new uint8_t[nFrameLen_ * 2]);
-			bufferTemp1.reset(new uint8_t[nFrameLen_ * 2]);
+		else if (evType_RGB24 == evType_)
+			bufferTemp.reset(new uint8_t[nFrameLen_]);
+
+		DWORD dwaitTime;
+		switch (evType_)
+		{
+		case evType_I420:
+			dwaitTime = 32;
+			break;
+		case evType_RGB24:
+			dwaitTime = 10;
+			break;
+		case evType_BGRA:
+			dwaitTime = 40;
+			break;
+		default:
+			break;
 		}
 		
 		while (bRunning_) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(evType_I420 == evType_ ? 30:40));
+			std::this_thread::sleep_for(std::chrono::milliseconds(dwaitTime));
 			if (pfile_ &&  (evrType_Publish_Start == m_evrPublishType) && nFrameLen_ ) {
 				int nRes = fread(videobuffer_.get(),1,nFrameLen_,pfile_);
 				if (nRes <= 0)
 					fseek(pfile_, 0, SEEK_SET);
 
 				//to do
-				DWORD dwtps = timeGetTime();
+				DWORD dwpts = timeGetTime();
 				if (m_pVideoPublishData) {
 					if (evType_I420 == evType_) {
 						util::CVideoConv::I420ToRGB24(videobuffer_.get(), bufferTemp.get(),nFrameLen_ * 2,nFrameWidth_,nFrameHeight_);
-						util::CVideoConv::VerMirror_RGB24(bufferTemp.get(), bufferTemp1.get(), nFrameWidth_, nFrameHeight_);
 						if(m_pVideoPublishData)
-							m_pVideoPublishData->onPublishData(dwtps, bufferTemp1, nFrameLen_ * 2, nFrameWidth_, nFrameHeight_);
+							m_pVideoPublishData->onPublishData(dwpts, bufferTemp, nFrameLen_ * 2, nFrameWidth_, nFrameHeight_);
 					}
 					else if (evType_RGB24 == evType_) {
-						m_pVideoPublishData->onPublishData(dwtps, videobuffer_, nFrameLen_, nFrameWidth_, nFrameHeight_);
+						util::CVideoConv::VerMirror_RGB24(videobuffer_.get(), bufferTemp.get(), nFrameWidth_, nFrameHeight_);
+						util::CVideoConv::CONVERT_ENDIAN_RGB24(bufferTemp.get(),nFrameWidth_,nFrameHeight_);
+						if(m_pVideoPublishData)
+							m_pVideoPublishData->onPublishData(dwpts, bufferTemp, nFrameLen_, nFrameWidth_, nFrameHeight_);
+					}
+					else if (evType_BGRA == evType_) {
+						if(m_pVideoPublishData)
+							m_pVideoPublishData->onPublishData(dwpts, videobuffer_, nFrameLen_, nFrameWidth_, nFrameHeight_);
 					}
 				}
 			}

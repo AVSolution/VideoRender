@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <thread>
 #include <memory>
+#include <mutex>
 #include "videoroute.h"
 using namespace videoroute;
 
@@ -12,6 +13,7 @@ namespace videofile {
 	enum eVideoFileType {
 		evType_NULL = -1,
 		evType_RGB24,
+		evType_BGRA,
 		evType_I420,
 		evType_PNG,
 		evType_BMP,

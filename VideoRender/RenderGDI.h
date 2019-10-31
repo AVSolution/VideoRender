@@ -7,9 +7,14 @@
 
 namespace videorender {
 
+	enum eRenderType {
+		eRenderType_RGB24,
+		eRenderType_BGRA,
+	};
+
 	class CRenderGDI {
 	public:
-		CRenderGDI();
+		CRenderGDI(eRenderType renderType = eRenderType_RGB24);
 		CRenderGDI(void* pHandle, int nWidth, int nHeight);
 		CRenderGDI(const CRenderGDI& rendergdi);
 		~CRenderGDI();
@@ -42,6 +47,7 @@ namespace videorender {
 		RECT			m_addTxtRt;
 		std::unique_ptr<BYTE>	m_logoBuffer;
 		RECT			m_addLogoRt;
+		eRenderType		m_renderType;
 
 		ATL::CImage* m_pImageBk;
 	};
